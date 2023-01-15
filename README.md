@@ -1,4 +1,4 @@
-# License Plate Detection Tutorial
+# Animal Detection Tutorial
 
 <table align="left">
   <td>
@@ -19,15 +19,12 @@
 
 
 ```python
-!wget -nc https://raw.githubusercontent.com/georgia-tech-db/license-plate-recognition/main/requirements.txt
+!wget -nc https://raw.githubusercontent.com/jarulraj/animal-detection/main/requirements.txt
 !pip -q --no-color install -r requirements.txt
 ```
 
     File ‘requirements.txt’ already there; not retrieving.
     
-    
-    [1m[[0mnotice[1m][0m A new release of pip available: 22.2.2 -> 22.3.1
-    [1m[[0mnotice[1m][0m To update, run: pip install --upgrade pip
 
 
 ### Start EVA server
@@ -44,162 +41,117 @@ cursor = connect_to_server()
     File ‘00-start-eva-server.ipynb’ already there; not retrieving.
     
     nohup eva_server > eva.log 2>&1 &
-    
-    [1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m A new release of pip available: [0m[31;49m22.2.2[0m[39;49m -> [0m[32;49m22.3.1[0m
-    [1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m To update, run: [0m[32;49mpython -m pip install --upgrade pip[0m
     Note: you may need to restart the kernel to use updated packages.
 
 
-### Register License Plate Extraction UDF
+### Register Animal Detection UDF
 
 
 ```python
-!wget -nc "https://raw.githubusercontent.com/georgia-tech-db/license-plate-recognition/main/ocr_extractor.py"
-cursor.execute("DROP UDF LicensePlateExtractor;")
+cursor.execute("DROP UDF AnimalDetectorPlus;")
 response = cursor.fetch_all()
 print(response)
-cursor.execute("""CREATE UDF IF NOT EXISTS LicensePlateExtractor
+cursor.execute("""CREATE UDF IF NOT EXISTS AnimalDetectorPlus
       INPUT  (frame NDARRAY UINT8(3, ANYDIM, ANYDIM))
-      OUTPUT (labels NDARRAY STR(ANYDIM), bboxes NDARRAY FLOAT32(ANYDIM, 4),
+      OUTPUT (labels NDARRAY STR(ANYDIM), 
               scores NDARRAY FLOAT32(ANYDIM))
       TYPE  Classification
-      IMPL  'license_plate_extractor.py';
+      IMPL  'animal_image_classifier.py';
       """)
 response = cursor.fetch_all()
 print(response)
 ```
 
-    File ‘ocr_extractor.py’ already there; not retrieving.
-    
     @status: ResponseStatus.SUCCESS
     @batch: 
-                                                     0
-    0  UDF LicensePlateExtractor successfully dropped
-    @query_time: 0.022147773997858167
+                                                  0
+    0  UDF AnimalDetectorPlus successfully dropped
+    @query_time: 0.018092521000653505
     @status: ResponseStatus.SUCCESS
     @batch: 
-                                                                    0
-    0  UDF LicensePlateExtractor successfully added to the database.
-    @query_time: 6.117930265143514
+                                                                 0
+    0  UDF AnimalDetectorPlus successfully added to the database.
+    @query_time: 3.3645256410818547
 
 
-## Download Images for License Plate Recognition
+## Download Images
 
 
 ```python
-!wget -nc "https://raw.githubusercontent.com/georgia-tech-db/license-plate-recognition/main/test_image_1.png"
-!wget -nc "https://raw.githubusercontent.com/georgia-tech-db/license-plate-recognition/main/test_image_2.png"
-!wget -nc "https://raw.githubusercontent.com/femioladeji/License-Plate-Recognition-Nigerian-vehicles/master/test_images/car10.jpg"
-!wget -nc "https://raw.githubusercontent.com/femioladeji/License-Plate-Recognition-Nigerian-vehicles/master/test_images/car6.jpg"
-!wget -nc "https://im.ezgif.com/tmp/ezgif-1-c32008dd2a-jpg/ezgif-frame-001.jpg"
+!wget -nc "https://raw.githubusercontent.com/jarulraj/animal-detection/main/dog.png"
+!wget -nc "https://raw.githubusercontent.com/jarulraj/animal-detection/main/giraffe.png"
 
 # DOWNLOAD ADDITIONAL IMAGES IF NEEDED AND LOAD THEM
+!tail -n 50 eva.log
 
-#for i, plates in enumerate(car_plates):
-#    for j, plate in enumerate(plates):
-i=0
-j=0
-file_name = "frame" + str(i)+ "_plate" + str(j) + ".png"
-print(file_name)
 cursor.execute('DROP TABLE IF EXISTS MyImages')
 response = cursor.fetch_all()
 print(response)
+
+file_name = "dog.jpg"
 cursor.execute('LOAD IMAGE "' + file_name + '" INTO MyImages;')
 response = cursor.fetch_all()
 print(response)
-cursor.execute('LOAD IMAGE "test_image_1.png" INTO MyImages;')
-response = cursor.fetch_all()
-print(response)
-cursor.execute('LOAD IMAGE "test_image_2.png" INTO MyImages;')
-response = cursor.fetch_all()
-print(response)
-cursor.execute('LOAD IMAGE "car10.jpg" INTO MyImages;')
-response = cursor.fetch_all()
-print(response)
-cursor.execute('LOAD IMAGE "car6.jpg" INTO MyImages;')
-response = cursor.fetch_all()
-print(response)
-cursor.execute('LOAD IMAGE "ezgif-frame-001.jpg" INTO MyImages;')
-response = cursor.fetch_all()
-print(response)
-cursor.execute("""SELECT LicensePlateExtractor(data)
+
+cursor.execute("""SELECT AnimalDetectorPlus(data)
                 FROM MyImages""")
 response = cursor.fetch_all()
 print(response)
 ```
 
-    File ‘test_image_1.png’ already there; not retrieving.
+    --2023-01-14 22:47:35--  https://raw.githubusercontent.com/jarulraj/animal-detection/main/dog.png
+    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.110.133, 185.199.111.133, 185.199.109.133, ...
+    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.110.133|:443... connected.
+    HTTP request sent, awaiting response... 404 Not Found
+    2023-01-14 22:47:35 ERROR 404: Not Found.
     
-    File ‘test_image_2.png’ already there; not retrieving.
+    --2023-01-14 22:47:36--  https://raw.githubusercontent.com/jarulraj/animal-detection/main/giraffe.png
+    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.110.133, 185.199.111.133, 185.199.109.133, ...
+    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.110.133|:443... connected.
+    HTTP request sent, awaiting response... 404 Not Found
+    2023-01-14 22:47:36 ERROR 404: Not Found.
     
-    File ‘car10.jpg’ already there; not retrieving.
-    
-    File ‘car6.jpg’ already there; not retrieving.
-    
-    File ‘ezgif-frame-001.jpg’ already there; not retrieving.
-    
-    frame0_plate0.png
+    01-14-2023 22:47:20 INFO  [catalog_manager:catalog_manager.py:_bootstrap_catalog:0077] Bootstrapping catalog
+    01-14-2023 22:47:20 INFO  [base_model:base_model.py:init_db:0103] Creating tables
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.5122 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF FastRCNNObjectDetector already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0017 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Array_Count already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0014 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Crop already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0013 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Open already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0014 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF YoloV5 already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0021 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Similarity already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0011 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyObjectDetector already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0011 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyMultiObjectDetector already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0012 sec
+    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyFeatureExtractor already exists, nothing added.
+    01-14-2023 22:47:20 INFO  [server:server.py:start_server:0096] Start Server
+    01-14-2023 22:47:20 INFO  [server:server.py:start_server:0118] PID(3316215) serving on ('0.0.0.0', 5432)
+    01-14-2023 22:47:31 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0018 sec
+    01-14-2023 22:47:31 INFO  [timer:timer.py:log_elapsed_time:0045] Query Response Time: 0.0181 sec
+    01-14-2023 22:47:31 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0021 sec
+    01-14-2023 22:47:35 INFO  [timer:timer.py:log_elapsed_time:0045] Query Response Time: 3.3645 sec
     @status: ResponseStatus.SUCCESS
     @batch: 
                                            0
     0  Table Successfully dropped: MyImages
-    @query_time: 0.04186136811040342
+    @query_time: 0.0671690481249243
     @status: ResponseStatus.SUCCESS
     @batch: 
                                 0
     0  Number of loaded IMAGE: 1
-    @query_time: 0.04633867903612554
+    @query_time: 0.05825795419514179
     @status: ResponseStatus.SUCCESS
     @batch: 
-                                0
-    0  Number of loaded IMAGE: 1
-    @query_time: 0.03080133907496929
-    @status: ResponseStatus.SUCCESS
-    @batch: 
-                                0
-    0  Number of loaded IMAGE: 1
-    @query_time: 0.019923059036955237
-    @status: ResponseStatus.SUCCESS
-    @batch: 
-                                0
-    0  Number of loaded IMAGE: 1
-    @query_time: 0.016502656042575836
-    @status: ResponseStatus.SUCCESS
-    @batch: 
-                                0
-    0  Number of loaded IMAGE: 1
-    @query_time: 0.017850678879767656
-    @status: ResponseStatus.SUCCESS
-    @batch: 
-                                0
-    0  Number of loaded IMAGE: 1
-    @query_time: 0.12373152794316411
-    @status: ResponseStatus.SUCCESS
-    @batch: 
-       licenseplateextractor.labels  \
-    0                           []   
-    1                  [TN4805566]   
-    2                   [INAQ3044]   
-    3                   [EGB62644]   
-    4                   [LEM446A4]   
-    5        [4II982A7A, 770L7726]   
-    
-                                                                              licenseplateextractor.bboxes  \
-    0                                                                                                   []   
-    1                                                   [[[432, 648], [723, 648], [723, 698], [432, 698]]]   
-    2                                                   [[[298, 238], [398, 238], [398, 264], [298, 264]]]   
-    3                                                   [[[178, 430], [300, 430], [300, 462], [178, 462]]]   
-    4                                                   [[[263, 465], [383, 465], [383, 501], [263, 501]]]   
-    5  [[[2263, 398], [2347, 398], [2347, 436], [2263, 436]], [[216.02985749985467, 829.1194299994187],...   
-    
-                       licenseplateextractor.scores  
-    0                                            []  
-    1                           [0.765264012834225]  
-    2                          [0.5979598335637649]  
-    3                          [0.8205181373232121]  
-    4                         [0.37683450003837526]  
-    5  [0.005999226930693703, 0.041628318390644674]  
-    @query_time: 6.203295932849869
+       animaldetectorplus.labels animaldetectorplus.scores
+    0  [antelope_duiker, blank]   [0.12582284, 0.4444601]
+    @query_time: 2.002609691116959
 
 
 ### Annotate Model Output on Image
@@ -227,31 +179,17 @@ def annotate_image_ocr(detections, input_image_path, frame_id):
     plate_id = 0
 
     df = detections
-    df = df[['licenseplateextractor.bboxes', 'licenseplateextractor.labels']][df.index == frame_id]
+    df = df[['animaldetectorplus.labels']][df.index == frame_id]
 
     x_offset = width * 0.2
     y_offset = height * 0.4
 
     if df.size:
         dfLst = df.values.tolist()
-        for bbox, label in zip(dfLst[plate_id][0], dfLst[plate_id][1]):
-            x1, y1, x2, y2 = bbox
-            x1, y1, x2, y2 = int(x1[0]), int(x1[1]), int(x2[0]), int(x2[1])
-            # object bbox
-            cv2.rectangle(frame, (x1, y1), (x2, y2), color1, thickness) 
+        for label in dfLst[0][0]:
 
-            # object label
-            # Only license plate
-            if frame_id == 0:
-                cv2.putText(frame, label, (int(x_offset), int(y_offset)), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color2, thickness, cv2.LINE_AA) 
-            # Full image
-            else:
-                if width < 1200:
-                  cv2.putText(frame, label, (int(x_offset), int(y_offset)), cv2.FONT_HERSHEY_SIMPLEX, 3, color2, thickness, cv2.LINE_AA) 
-                  y_offset = y_offset + height * 0.2
-                else:
-                  cv2.putText(frame, label, (int(x_offset), int(y_offset)), cv2.FONT_HERSHEY_SIMPLEX, 6, color2, thickness * 3, cv2.LINE_AA) 
-                  y_offset = y_offset + height * 0.1
+            cv2.putText(frame, label, (int(x_offset), int(y_offset)), cv2.FONT_HERSHEY_SIMPLEX, 3, color2, thickness, cv2.LINE_AA) 
+            y_offset = y_offset + height * 0.2
 
             # Show every  frame
             plt.imshow(frame)
@@ -267,60 +205,11 @@ def annotate_image_ocr(detections, input_image_path, frame_id):
 
 ```python
 dataframe = response.batch.frames
-annotate_image_ocr(dataframe, 'frame0_plate0.png', frame_id = 0)
-annotate_image_ocr(dataframe, 'test_image_1.png', frame_id = 1)
-annotate_image_ocr(dataframe, 'test_image_2.png', frame_id = 2)
-annotate_image_ocr(dataframe, 'car10.jpg', frame_id = 3)
-annotate_image_ocr(dataframe, 'car6.jpg', frame_id = 4)
-annotate_image_ocr(dataframe, 'ezgif-frame-001.jpg', frame_id = 5)
+annotate_image_ocr(dataframe, 'dog.jpg', frame_id = 0)
 ```
 
-      licenseplateextractor.labels  \
-    0                           []   
-    1                  [TN4805566]   
-    2                   [INAQ3044]   
-    3                   [EGB62644]   
-    4                   [LEM446A4]   
-    5        [4II982A7A, 770L7726]   
-    
-                            licenseplateextractor.bboxes  \
-    0                                                 []   
-    1  [[[432, 648], [723, 648], [723, 698], [432, 69...   
-    2  [[[298, 238], [398, 238], [398, 264], [298, 26...   
-    3  [[[178, 430], [300, 430], [300, 462], [178, 46...   
-    4  [[[263, 465], [383, 465], [383, 501], [263, 50...   
-    5  [[[2263, 398], [2347, 398], [2347, 436], [2263...   
-    
-                       licenseplateextractor.scores  
-    0                                            []  
-    1                           [0.765264012834225]  
-    2                          [0.5979598335637649]  
-    3                          [0.8205181373232121]  
-    4                         [0.37683450003837526]  
-    5  [0.005999226930693703, 0.041628318390644674]  
-      licenseplateextractor.labels  \
-    0                           []   
-    1                  [TN4805566]   
-    2                   [INAQ3044]   
-    3                   [EGB62644]   
-    4                   [LEM446A4]   
-    5        [4II982A7A, 770L7726]   
-    
-                            licenseplateextractor.bboxes  \
-    0                                                 []   
-    1  [[[432, 648], [723, 648], [723, 698], [432, 69...   
-    2  [[[298, 238], [398, 238], [398, 264], [298, 26...   
-    3  [[[178, 430], [300, 430], [300, 462], [178, 46...   
-    4  [[[263, 465], [383, 465], [383, 501], [263, 50...   
-    5  [[[2263, 398], [2347, 398], [2347, 436], [2263...   
-    
-                       licenseplateextractor.scores  
-    0                                            []  
-    1                           [0.765264012834225]  
-    2                          [0.5979598335637649]  
-    3                          [0.8205181373232121]  
-    4                         [0.37683450003837526]  
-    5  [0.005999226930693703, 0.041628318390644674]  
+      animaldetectorplus.labels animaldetectorplus.scores
+    0  [antelope_duiker, blank]   [0.12582284, 0.4444601]
 
 
 
@@ -329,132 +218,8 @@ annotate_image_ocr(dataframe, 'ezgif-frame-001.jpg', frame_id = 5)
     
 
 
-      licenseplateextractor.labels  \
-    0                           []   
-    1                  [TN4805566]   
-    2                   [INAQ3044]   
-    3                   [EGB62644]   
-    4                   [LEM446A4]   
-    5        [4II982A7A, 770L7726]   
-    
-                            licenseplateextractor.bboxes  \
-    0                                                 []   
-    1  [[[432, 648], [723, 648], [723, 698], [432, 69...   
-    2  [[[298, 238], [398, 238], [398, 264], [298, 26...   
-    3  [[[178, 430], [300, 430], [300, 462], [178, 46...   
-    4  [[[263, 465], [383, 465], [383, 501], [263, 50...   
-    5  [[[2263, 398], [2347, 398], [2347, 436], [2263...   
-    
-                       licenseplateextractor.scores  
-    0                                            []  
-    1                           [0.765264012834225]  
-    2                          [0.5979598335637649]  
-    3                          [0.8205181373232121]  
-    4                         [0.37683450003837526]  
-    5  [0.005999226930693703, 0.041628318390644674]  
-
-
 
     
-![png](README_files/README_12_3.png)
-    
-
-
-      licenseplateextractor.labels  \
-    0                           []   
-    1                  [TN4805566]   
-    2                   [INAQ3044]   
-    3                   [EGB62644]   
-    4                   [LEM446A4]   
-    5        [4II982A7A, 770L7726]   
-    
-                            licenseplateextractor.bboxes  \
-    0                                                 []   
-    1  [[[432, 648], [723, 648], [723, 698], [432, 69...   
-    2  [[[298, 238], [398, 238], [398, 264], [298, 26...   
-    3  [[[178, 430], [300, 430], [300, 462], [178, 46...   
-    4  [[[263, 465], [383, 465], [383, 501], [263, 50...   
-    5  [[[2263, 398], [2347, 398], [2347, 436], [2263...   
-    
-                       licenseplateextractor.scores  
-    0                                            []  
-    1                           [0.765264012834225]  
-    2                          [0.5979598335637649]  
-    3                          [0.8205181373232121]  
-    4                         [0.37683450003837526]  
-    5  [0.005999226930693703, 0.041628318390644674]  
-
-
-
-    
-![png](README_files/README_12_5.png)
-    
-
-
-      licenseplateextractor.labels  \
-    0                           []   
-    1                  [TN4805566]   
-    2                   [INAQ3044]   
-    3                   [EGB62644]   
-    4                   [LEM446A4]   
-    5        [4II982A7A, 770L7726]   
-    
-                            licenseplateextractor.bboxes  \
-    0                                                 []   
-    1  [[[432, 648], [723, 648], [723, 698], [432, 69...   
-    2  [[[298, 238], [398, 238], [398, 264], [298, 26...   
-    3  [[[178, 430], [300, 430], [300, 462], [178, 46...   
-    4  [[[263, 465], [383, 465], [383, 501], [263, 50...   
-    5  [[[2263, 398], [2347, 398], [2347, 436], [2263...   
-    
-                       licenseplateextractor.scores  
-    0                                            []  
-    1                           [0.765264012834225]  
-    2                          [0.5979598335637649]  
-    3                          [0.8205181373232121]  
-    4                         [0.37683450003837526]  
-    5  [0.005999226930693703, 0.041628318390644674]  
-
-
-
-    
-![png](README_files/README_12_7.png)
-    
-
-
-      licenseplateextractor.labels  \
-    0                           []   
-    1                  [TN4805566]   
-    2                   [INAQ3044]   
-    3                   [EGB62644]   
-    4                   [LEM446A4]   
-    5        [4II982A7A, 770L7726]   
-    
-                            licenseplateextractor.bboxes  \
-    0                                                 []   
-    1  [[[432, 648], [723, 648], [723, 698], [432, 69...   
-    2  [[[298, 238], [398, 238], [398, 264], [298, 26...   
-    3  [[[178, 430], [300, 430], [300, 462], [178, 46...   
-    4  [[[263, 465], [383, 465], [383, 501], [263, 50...   
-    5  [[[2263, 398], [2347, 398], [2347, 436], [2263...   
-    
-                       licenseplateextractor.scores  
-    0                                            []  
-    1                           [0.765264012834225]  
-    2                          [0.5979598335637649]  
-    3                          [0.8205181373232121]  
-    4                         [0.37683450003837526]  
-    5  [0.005999226930693703, 0.041628318390644674]  
-
-
-
-    
-![png](README_files/README_12_9.png)
-    
-
-
-
-    
-![png](README_files/README_12_10.png)
+![png](README_files/README_12_2.png)
     
 

@@ -185,5 +185,5 @@ eva-application
 
 *.png
 *.jpg
-eva-application-env
+eva-application-venv
 udfs/
