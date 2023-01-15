@@ -66,12 +66,12 @@ print(response)
     @batch: 
                                                   0
     0  UDF AnimalDetectorPlus successfully dropped
-    @query_time: 0.018092521000653505
+    @query_time: 0.015989525942131877
     @status: ResponseStatus.SUCCESS
     @batch: 
                                                                  0
     0  UDF AnimalDetectorPlus successfully added to the database.
-    @query_time: 3.3645256410818547
+    @query_time: 3.3755824179388583
 
 
 ## Download Images
@@ -99,59 +99,59 @@ response = cursor.fetch_all()
 print(response)
 ```
 
-    --2023-01-14 22:47:35--  https://raw.githubusercontent.com/jarulraj/animal-detection/main/dog.png
+    --2023-01-14 22:53:41--  https://raw.githubusercontent.com/jarulraj/animal-detection/main/dog.png
     Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.110.133, 185.199.111.133, 185.199.109.133, ...
     Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.110.133|:443... connected.
     HTTP request sent, awaiting response... 404 Not Found
-    2023-01-14 22:47:35 ERROR 404: Not Found.
+    2023-01-14 22:53:41 ERROR 404: Not Found.
     
-    --2023-01-14 22:47:36--  https://raw.githubusercontent.com/jarulraj/animal-detection/main/giraffe.png
+    --2023-01-14 22:53:42--  https://raw.githubusercontent.com/jarulraj/animal-detection/main/giraffe.png
     Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.110.133, 185.199.111.133, 185.199.109.133, ...
     Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.110.133|:443... connected.
     HTTP request sent, awaiting response... 404 Not Found
-    2023-01-14 22:47:36 ERROR 404: Not Found.
+    2023-01-14 22:53:42 ERROR 404: Not Found.
     
-    01-14-2023 22:47:20 INFO  [catalog_manager:catalog_manager.py:_bootstrap_catalog:0077] Bootstrapping catalog
-    01-14-2023 22:47:20 INFO  [base_model:base_model.py:init_db:0103] Creating tables
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.5122 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF FastRCNNObjectDetector already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0017 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Array_Count already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0014 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Crop already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0013 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Open already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0014 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF YoloV5 already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0021 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Similarity already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0011 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyObjectDetector already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0011 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyMultiObjectDetector already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0012 sec
-    01-14-2023 22:47:20 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyFeatureExtractor already exists, nothing added.
-    01-14-2023 22:47:20 INFO  [server:server.py:start_server:0096] Start Server
-    01-14-2023 22:47:20 INFO  [server:server.py:start_server:0118] PID(3316215) serving on ('0.0.0.0', 5432)
-    01-14-2023 22:47:31 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0018 sec
-    01-14-2023 22:47:31 INFO  [timer:timer.py:log_elapsed_time:0045] Query Response Time: 0.0181 sec
-    01-14-2023 22:47:31 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0021 sec
-    01-14-2023 22:47:35 INFO  [timer:timer.py:log_elapsed_time:0045] Query Response Time: 3.3645 sec
+    01-14-2023 22:53:26 INFO  [catalog_manager:catalog_manager.py:_bootstrap_catalog:0077] Bootstrapping catalog
+    01-14-2023 22:53:26 INFO  [base_model:base_model.py:init_db:0103] Creating tables
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.4857 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF FastRCNNObjectDetector already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0017 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Array_Count already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0013 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Crop already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0012 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Open already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0014 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF YoloV5 already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0020 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF Similarity already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0011 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyObjectDetector already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0010 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyMultiObjectDetector already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0011 sec
+    01-14-2023 22:53:26 WARNING[create_udf_executor:create_udf_executor.py:exec:0042] UDF DummyFeatureExtractor already exists, nothing added.
+    01-14-2023 22:53:26 INFO  [server:server.py:start_server:0096] Start Server
+    01-14-2023 22:53:26 INFO  [server:server.py:start_server:0118] PID(3318822) serving on ('0.0.0.0', 5432)
+    01-14-2023 22:53:37 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0015 sec
+    01-14-2023 22:53:37 INFO  [timer:timer.py:log_elapsed_time:0045] Query Response Time: 0.0160 sec
+    01-14-2023 22:53:37 INFO  [timer:timer.py:log_elapsed_time:0045] Query Compile Time: 0.0017 sec
+    01-14-2023 22:53:41 INFO  [timer:timer.py:log_elapsed_time:0045] Query Response Time: 3.3756 sec
     @status: ResponseStatus.SUCCESS
     @batch: 
                                            0
     0  Table Successfully dropped: MyImages
-    @query_time: 0.0671690481249243
+    @query_time: 0.04396463208831847
     @status: ResponseStatus.SUCCESS
     @batch: 
                                 0
     0  Number of loaded IMAGE: 1
-    @query_time: 0.05825795419514179
+    @query_time: 0.056759868981316686
     @status: ResponseStatus.SUCCESS
     @batch: 
        animaldetectorplus.labels animaldetectorplus.scores
-    0  [antelope_duiker, blank]   [0.12582284, 0.4444601]
-    @query_time: 2.002609691116959
+    0  [antelope_duiker, blank]  [0.14626732, 0.43839565]
+    @query_time: 1.9700300961267203
 
 
 ### Annotate Model Output on Image
@@ -209,7 +209,7 @@ annotate_image_ocr(dataframe, 'dog.jpg', frame_id = 0)
 ```
 
       animaldetectorplus.labels animaldetectorplus.scores
-    0  [antelope_duiker, blank]   [0.12582284, 0.4444601]
+    0  [antelope_duiker, blank]  [0.14626732, 0.43839565]
 
 
 
